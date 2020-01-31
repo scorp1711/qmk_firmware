@@ -37,12 +37,14 @@ void add_keylog(uint16_t keycode);
 #define _QWERTY 0
 #define _LOWER 1
 #define _RAISE 2
-#define _ADJUST 3
+#define _THIRD 3
+#define _ADJUST 4
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,
   LOWER,
   RAISE,
+  THIRD,
   ADJUST
 };
 
@@ -50,7 +52,8 @@ enum custom_keycodes {
 #define KC____X___ KC_NO
 
 #define KC_ALGUI LALT_T(KC_LGUI)
-#define KC_LWGUI LT(_LOWER, KC_LGUI)
+#define KC_LOCKW LGUI_T(KC_L)
+#define KC_THENT LT(_THIRD, KC_ENT)
 #define KC_LOWER LOWER
 #define KC_RAISE RAISE
 #define KC_SNUHS S(KC_NUHS)
@@ -65,7 +68,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
          LSFT,       Z,       X,       C,       V,       B,                            N,       M,    COMM,     DOT,    SLSH,    RSFT,\
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                             ALGUI,  LOWER,     SPC,        ENT,  RAISE,     RALT \
+                                             ALGUI,  LOWER,     SPC,      THENT,  RAISE,     RALT \
                                       //`--------------------------'  `--------------------------'
   ),
 
@@ -75,7 +78,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, ___X___, ___X___, ___X___, ___X___, ___X___,                         MINS,     EQL,    LCBR,    RCBR,    PIPE,     GRV,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, ___X___, ___X___, ___X___, ___X___, ___X___,                         UNDS,    PLUS,    LBRC,    RBRC,    BSLS,    TILD,\
+      _______,    LOCK, ___X___, ___X___, ___X___, ___X___,                         UNDS,    PLUS,    LBRC,    RBRC,    BSLS,    TILD,\
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           _______, _______, _______,    _______, _______, _______\
                                       //`--------------------------'  `--------------------------'
@@ -93,11 +96,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                       //`--------------------------'  `--------------------------'
   ),
 
+  [_THIRD] = LAYOUT_kc( \
+  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+      ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,                      ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,\
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+      ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,                      ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,\
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+      ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,                      ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,\
+  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                                          _______, _______, _______,    _______, _______, _______\
+                                      //`--------------------------'  `--------------------------'
+  )
+
   [_ADJUST] = LAYOUT_kc( \
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,                      ___X___, ___X___,    MPRV,    MPLY,    MNXT,    MUTE,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      ___X___,      F1,      F2,      F3,      F4,      F5,                           F6,    LEFT,    DOWN,      UP,   RIGHT,    VOLU,\
+      ___X___,      F1,      F2,      F3,      F4,      F5,                           F6, ___X___, ___X___,   LOCKW, ___X___,    VOLU,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       ___X___,      F7,      F8,      F9,     F10,     F11,                          F12, ___X___, ___X___, ___X___, ___X___,    VOLD,\
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -145,10 +160,13 @@ void render_keylogger_status(void) {
 }
 
 void render_layer_state(void) {
-  oled_write_P(PSTR("Layr:"), false);
+  oled_write_P(PSTR("Layer"), false);
+  oled_write_P(PSTR("-----"), false);
   oled_write_P(PSTR("  Sym"), layer_state_is(_LOWER) && !layer_state_is(_RAISE));
   oled_write_P(PSTR("  Num"), layer_state_is(_RAISE) && !layer_state_is(_LOWER));
+  oled_write_P(PSTR("Third"), layer_state_is(_THIRD));
   oled_write_P(PSTR("   Fn"), layer_state_is(_ADJUST));
+  oled_write_P(PSTR("-----"), false);
 }
 
 void render_mod_status(uint8_t modifiers) {
@@ -162,13 +180,13 @@ void render_mod_status(uint8_t modifiers) {
 
 void render_status_main(void) {
     render_layer_state();
-    oled_write_ln_P(PSTR(""), false);
+    oled_write_ln_P(PSTR("\n"), false);
     render_keylogger_status();
 }
 
 void render_status_secondary(void) {
     render_layer_state();
-    oled_write_ln_P(PSTR(""), false);
+    oled_write_ln_P(PSTR("\n"), false);
 
     #ifdef NO_ACTION_ONESHOT
       render_mod_status(get_mods());
