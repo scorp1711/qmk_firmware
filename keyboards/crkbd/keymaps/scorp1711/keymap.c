@@ -37,27 +37,40 @@ void add_keylog(uint16_t keycode);
 #define _QWERTY 0
 #define _LOWER 1
 #define _RAISE 2
-#define _FUNC 3
-#define _ADJUST 4
+#define _ADJUST 3
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,
   LOWER,
   RAISE,
-  FUNC,
   ADJUST
 };
+
+//Tap Dance Declarations
+enum {
+  TD_LSHIFT_CAPS,
+  TD_RSHIFT_CAPS
+};
+
+//Tap Dance Definitions
+qk_tap_dance_action_t tap_dance_actions[] = {
+  //Tap once for Shift, twice for Caps Lock
+  [TD_LSHIFT_CAPS]  = ACTION_TAP_DANCE_DOUBLE(KC_LSFT, KC_CAPS),
+  [TD_RSHIFT_CAPS]  = ACTION_TAP_DANCE_DOUBLE(KC_RSFT, KC_CAPS)
+};
+
 
 #define KC________ KC_TRNS
 #define KC____X___ KC_NO
 
 #define KC_ALGUI LALT_T(KC_LGUI)
 #define KC_LOCKW LGUI_T(KC_L)
-#define KC_THENT LT(_FUNC, KC_ENT)
 #define KC_LOWER LOWER
 #define KC_RAISE RAISE
 #define KC_SNUHS S(KC_NUHS)
 #define KC_SNUBS S(KC_NUBS)
+#define KC_LSHCP TD(TD_LSHIFT_CAPS)
+#define KC_RSHCP TD(TD_RSHIFT_CAPS)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_QWERTY] = LAYOUT_kc( \
@@ -66,9 +79,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
          LCTL,       A,       S,       D,       F,       G,                            H,       J,       K,       L,    SCLN,    QUOT,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-         LSFT,       Z,       X,       C,       V,       B,                            N,       M,    COMM,     DOT,    SLSH,    RSFT,\
+        LSHCP,       Z,       X,       C,       V,       B,                            N,       M,    COMM,     DOT,    SLSH,   RSHCP,\
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                             ALGUI,  LOWER,     SPC,      THENT,  RAISE,     RALT \
+                                             ALGUI,  LOWER,     SPC,        ENT,  RAISE,     RALT \
                                       //`--------------------------'  `--------------------------'
   ),
 
@@ -96,23 +109,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                       //`--------------------------'  `--------------------------'
   ),
 
-  [_FUNC] = LAYOUT_kc( \
-  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-           F1,      F2,      F3,      F4,      F5,      F6,                           F7,      F8,      F9,     F10,     F11,     F12,\
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,                      ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,\
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-         LOCK, ___X___, ___X___, ___X___, ___X___, ___X___,                      ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,\
-  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          _______, _______, _______,    _______, _______, _______\
-                                      //`--------------------------'  `--------------------------'
-  ),
-
   [_ADJUST] = LAYOUT_kc( \
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,                      ___X___, ___X___,    MPRV,    MPLY,    MNXT,    MUTE,\
+      ___X___,      F1,      F2,      F3,      F4,      F5,                           F6, ___X___,    MPRV,    MPLY,    MNXT,    MUTE,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,                      ___X___, ___X___, ___X___,   LOCKW, ___X___,    VOLU,\
+      ___X___,      F7,      F8,      F9,     F10,     F11,                          F12, ___X___, ___X___,   LOCKW, ___X___,    VOLU,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,                      ___X___, ___X___, ___X___, ___X___, ___X___,    VOLD,\
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -164,8 +165,7 @@ void render_layer_state(void) {
   oled_write_P(PSTR("-----"), false);
   oled_write_P(PSTR("  Sym"), layer_state_is(_LOWER) && !layer_state_is(_RAISE));
   oled_write_P(PSTR("  Num"), layer_state_is(_RAISE) && !layer_state_is(_LOWER));
-  oled_write_P(PSTR("   Fn"), layer_state_is(_FUNC));
-  oled_write_P(PSTR("  Adj"), layer_state_is(_ADJUST));
+  oled_write_P(PSTR("   Fn"), layer_state_is(_ADJUST));
   oled_write_P(PSTR("-----"), false);
 }
 
@@ -176,6 +176,11 @@ void render_mod_status(uint8_t modifiers) {
   oled_write_P(PSTR("C"), (modifiers & MOD_MASK_CTRL));
   oled_write_P(PSTR("A"), (modifiers & MOD_MASK_ALT));
   oled_write_P(PSTR("G"), (modifiers & MOD_MASK_GUI));
+  oled_write_ln_P(PSTR("\n"), false);
+
+  // Host Keyboard LED Status
+  led_t led_state = host_keyboard_led_state();
+  oled_write_P(led_state.caps_lock ? PSTR("CAP ") : PSTR("    "), false);
 }
 
 void render_status_main(void) {
