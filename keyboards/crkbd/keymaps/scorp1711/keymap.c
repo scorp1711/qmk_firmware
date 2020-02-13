@@ -46,20 +46,6 @@ enum custom_keycodes {
   ADJUST
 };
 
-//Tap Dance Declarations
-enum {
-  TD_LSHIFT_CAPS,
-  TD_RSHIFT_CAPS
-};
-
-//Tap Dance Definitions
-qk_tap_dance_action_t tap_dance_actions[] = {
-  //Tap once for Shift, twice for Caps Lock
-  [TD_LSHIFT_CAPS]  = ACTION_TAP_DANCE_DOUBLE(KC_LSFT, KC_CAPS),
-  [TD_RSHIFT_CAPS]  = ACTION_TAP_DANCE_DOUBLE(KC_RSFT, KC_CAPS)
-};
-
-
 #define KC________ KC_TRNS
 #define KC____X___ KC_NO
 
@@ -69,8 +55,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 #define KC_RAISE RAISE
 #define KC_SNUHS S(KC_NUHS)
 #define KC_SNUBS S(KC_NUBS)
-#define KC_LSHCP TD(TD_LSHIFT_CAPS)
-#define KC_RSHCP TD(TD_RSHIFT_CAPS)
+#define KC_ENTSHFT RSFT_T(KC_ENT)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_QWERTY] = LAYOUT_kc( \
@@ -79,9 +64,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
          LCTL,       A,       S,       D,       F,       G,                            H,       J,       K,       L,    SCLN,    QUOT,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-        LSHCP,       Z,       X,       C,       V,       B,                            N,       M,    COMM,     DOT,    SLSH,   RSHCP,\
+         LSFT,       Z,       X,       C,       V,       B,                            N,       M,    COMM,     DOT,    SLSH, ENTSHFT,\
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                             ALGUI,  LOWER,     SPC,        ENT,  RAISE,     RALT \
+                                             ALGUI,  LOWER,     SPC,        ENT,   RAISE,    RALT\
                                       //`--------------------------'  `--------------------------'
   ),
 
@@ -101,7 +86,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
           ESC,       1,       2,       3,       4,       5,                            6,       7,       8,       9,       0, _______,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______,    HOME,    PGDN,    PGUP,     END, ___X___,                      ___X___,    LEFT,    DOWN,      UP,   RIGHT,     DEL,\
+          DEL,    HOME,    PGDN,    PGUP,     END, ___X___,                      ___X___,    LEFT,    DOWN,      UP,   RIGHT,     INS,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, ___X___, ___X___, ___X___, ___X___, ___X___,                      ___X___, ___X___,    COMM,     DOT, ___X___,     INS,\
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
