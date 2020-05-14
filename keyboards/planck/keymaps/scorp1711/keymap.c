@@ -17,7 +17,7 @@
 #include QMK_KEYBOARD_H
 #include "muse.h"
 
-enum planck_layers { _QWERTY, _LOWER, _RAISE, _FUNC };
+enum planck_layers { _QWERTY, _LOWER, _RAISE, _FUNC, _I3 };
 
 enum planck_keycodes { QWERTY = SAFE_RANGE };
 
@@ -55,7 +55,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * ,-----------------------------------------------------------------------------------.
      * |   ~  |   !  |   @  |   #  |   $  |   %  |   ^  |   &  |   *  |   (  |   )  | Bksp |
      * |------+------+------+------+------+------+------+------+------+------+------+------|
-     * |CtlDel|      |      |      |      |      |   -  |   =  |   {  |   }  |   |  |  `   |
+     * |CtlDel| Home | Pgdn | Pgup | End  |      |   -  |   =  |   {  |   }  |   |  |  `   |
      * |------+------+------+------+------+------+------+------+------+------+------+------|
      * |      |      |      |      |      |      |   _  |   +  |   [  |   ]  |   \  |Enter |
      * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -64,7 +64,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      */
     [_LOWER] = LAYOUT_planck_grid(
         KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN,  KC_BSPC,
-        CTRLDEL, ___X___, ___X___, ___X___, ___X___, ___X___, KC_MINS,  KC_EQL, KC_LCBR, KC_RCBR, KC_PIPE,  KC_GRV,
+        CTRLDEL, KC_HOME, KC_PGDN, KC_PGUP,  KC_END, ___X___, KC_MINS,  KC_EQL, KC_LCBR, KC_RCBR, KC_PIPE,  KC_GRV,
         _______, ___X___, ___X___, ___X___, ___X___, ___X___, KC_UNDS, KC_PLUS, KC_LBRC, KC_RBRC, KC_BSLS, _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
     ),
@@ -103,6 +103,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, ___X___,
         ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, KC_MUTE, KC_MPLY,
         ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___
+    ),
+
+    /* I3 Layer
+     * ,-----------------------------------------------------------------------------------.
+     * |      |      |      |      |      |             |      |      |      |      |      |
+     * |------+------+------+------+------+------+------+------+------+------+------+------|
+     * |      |      |      |      |      |             |      |      |      |      |      |
+     * |------+------+------+------+------+------+------+------+------+------+------+------|
+     * |      |      |      |      |      |             |      |      |      |      |      |
+     * |------+------+------+------+------+------+------+------+------+------+------+------|
+     * |      |      |      |      |      |             |      |      |      |      |      |
+     * `-----------------------------------------------------------------------------------'
+     */
+    [_I3] = LAYOUT_planck_grid(
+        ___X___, G(KC_1), G(KC_2), G(KC_3), G(KC_4), G(KC_5), G(KC_6), G(KC_7), G(KC_8), G(KC_9), G(KC_0), ___X___,
+        CTRLDEL, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, G(KC_LEFT), G(KC_DOWN), G(KC_UP), G(KC_RGHT), ___X___,
+        KC_LSFT, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___,
+        ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___
     )
 
 };
@@ -111,6 +129,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 float plover_song[][2]    = SONG(PLOVER_SOUND);
 float plover_gb_song[][2] = SONG(PLOVER_GOODBYE_SOUND);
 #endif
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+  return update_tri_layer_state(state, _LOWER, _RAISE, _I3);
+}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
