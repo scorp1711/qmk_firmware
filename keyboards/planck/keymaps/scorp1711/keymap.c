@@ -29,6 +29,7 @@ enum planck_keycodes { QWERTY = SAFE_RANGE };
 #define CTLRDWN RCTL_T(KC_DOWN)
 #define CTRLESC LCTL_T(KC_ESC)
 #define CTRLDEL LCTL_T(KC_DEL)
+#define EURO RALT(KC_5)
 #define ___X___ XXXXXXX
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -71,7 +72,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     /* Raise
      * ,-----------------------------------------------------------------------------------.
-     * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp |
+     * |   €  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp |
      * |------+------+------+------+------+------+------+------+------+------+------+------|
      * |CtlDel| Home | Pgdn | Pgup | End  |      |      | Left | Down |  Up  |Right |  INS |
      * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -81,7 +82,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * `-----------------------------------------------------------------------------------'
      */
     [_RAISE] = LAYOUT_planck_grid(
-        KC_GRV,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0, KC_BSPC,
+           EURO,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0, KC_BSPC,
         CTRLDEL, KC_HOME, KC_PGDN, KC_PGUP,  KC_END, ___X___, _______, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT,  KC_INS,
         _______, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, KC_COMM,  KC_DOT, KC_SLSH, _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
