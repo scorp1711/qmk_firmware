@@ -35,5 +35,8 @@
 //#define MIDI_TONE_KEYCODE_OCTAVES 2
 
 // Most tactile encoders have detents every 4 stages
-#define ENCODER_RESOLUTION 4
+// #define TAP_CODE_DELAY 10
+#define ENCODER_RESOLUTION 2
 
+#define MOUSEKEY_WHEEL_MAX_SPEED 8
+#define MOUSEKEY_WHEEL_MAX_TIME_TO_MAX 40

@@ -1,3 +1,5 @@
 SRC += muse.c
 
 #AUDIO_ENABLE = no
+ENCODER_ENABLE = yes
+MOUSEKEY_ENABLE = yes
