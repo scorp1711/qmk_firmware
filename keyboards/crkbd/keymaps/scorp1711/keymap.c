@@ -49,7 +49,7 @@ enum custom_keycodes {
 #define KC________ KC_TRNS
 #define KC____X___ KC_NO
 
-#define KC_ALGUI LALT_T(KC_LGUI)
+#define KC_ALGUI LGUI_T(KC_LALT)
 #define KC_LOCKW LGUI_T(KC_L)
 #define KC_LOWER LOWER
 #define KC_RAISE RAISE
@@ -66,7 +66,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
          LSFT,       Z,       X,       C,       V,       B,                            N,       M,    COMM,     DOT,    SLSH, ENTSHFT,\
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                             ALGUI,  LOWER,     SPC,        ENT,   RAISE,    RALT\
+                                             ALGUI,  LOWER,     SPC,        SPC,   RAISE,    RALT\
                                       //`--------------------------'  `--------------------------'
   ),
 
