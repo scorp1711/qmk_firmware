@@ -17,9 +17,9 @@
 #include QMK_KEYBOARD_H
 #include "muse.h"
 
-enum planck_layers { _QWERTY, _LOWER, _RAISE, _FUNC };
+enum planck_layers { _QWERTY, _COLEMAK, _LOWER, _RAISE, _FUNC };
 
-enum planck_keycodes { QWERTY = SAFE_RANGE };
+enum planck_keycodes { QWERTY = SAFE_RANGE, COLEMAK };
 
 #define LOWER MO(_LOWER)
 #define RAISE MO(_RAISE)
@@ -45,11 +45,29 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |      |  FN  | GUI  | Alt  |Lower |    Space    |Raise |AltLft|CtlDwn|  Up  |Right |
      * `-----------------------------------------------------------------------------------'
      */
-    [_QWERTY] = LAYOUT_planck_grid(
+    [_QWERTY] = LAYOUT_planck_mit(
         KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, KC_BSPC,
         CTRLESC, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_QUOT,
         KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, ENTSHFT,
-        ___X___,   FN, KC_LALT, KC_LGUI,   LOWER,  KC_SPC,  KC_SPC,   RAISE, ALTRLFT, CTLRDWN,   KC_UP, KC_RGHT
+        ___X___,   FN, KC_LALT, KC_LGUI,   LOWER,        KC_SPC,      RAISE, ALTRLFT, CTLRDWN,   KC_UP, KC_RGHT
+    ),
+
+    /* Colemak
+    * ,-----------------------------------------------------------------------------------.
+    * | Tab  |   Q  |   W  |   F  |   P  |   G  |   J  |   L  |   U  |   Y  |   ;  | Bksp |
+    * |------+------+------+------+------+------+------+------+------+------+------+------|
+    * | Esc  |   A  |   R  |   S  |   T  |   D  |   H  |   N  |   E  |   I  |   O  |  "   |
+    * |------+------+------+------+------+------+------+------+------+------+------+------|
+    * | Shift|   Z  |   X  |   C  |   V  |   B  |   K  |   M  |   ,  |   .  |   /  |Enter |
+    * |------+------+------+------+------+------+------+------+------+------+------+------|
+    * | Brite| Ctrl | Alt  | GUI  |Lower |    Space    |Raise | Left | Down |  Up  |Right |
+    * `-----------------------------------------------------------------------------------'
+    */
+    [_COLEMAK] = LAYOUT_planck_mit(
+        KC_TAB,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,    KC_J,    KC_L,    KC_U,    KC_Y, KC_SCLN, KC_BSPC,
+        KC_ESC,  KC_A,    KC_R,    KC_S,    KC_T,    KC_D,    KC_H,    KC_N,    KC_E,    KC_I,    KC_O, KC_QUOT,
+        KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_K,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, ENTSHFT,
+        ___X___,   FN, KC_LALT, KC_LGUI,   LOWER,        KC_SPC,      RAISE, ALTRLFT, CTLRDWN,   KC_UP, KC_RGHT
     ),
 
     /* Lower
@@ -63,11 +81,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |      |      |      |      |      |             |      | Home | Pgdn | Pgup | End  |
      * `-----------------------------------------------------------------------------------'
      */
-    [_LOWER] = LAYOUT_planck_grid(
+    [_LOWER] = LAYOUT_planck_mit(
         KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN,  KC_BSPC,
         CTRLDEL, KC_HOME, KC_PGDN, KC_PGUP,  KC_END, ___X___, KC_MINS,  KC_EQL, KC_LCBR, KC_RCBR, KC_PIPE,  KC_GRV,
         _______, ___X___, ___X___, ___X___, ___X___, ___X___, KC_UNDS, KC_PLUS, KC_LBRC, KC_RBRC, KC_BSLS, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, KC_HOME, KC_PGDN, KC_PGUP,  KC_END
+        _______, _______, _______, _______, _______,      _______,     _______, KC_HOME, KC_PGDN, KC_PGUP,  KC_END
     ),
 
     /* Raise
@@ -81,29 +99,29 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |      |      |      |      |      |             |      | Home | Pgdn | Pgup | End  |
      * `-----------------------------------------------------------------------------------'
      */
-    [_RAISE] = LAYOUT_planck_grid(
+    [_RAISE] = LAYOUT_planck_mit(
            EURO,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0, KC_BSPC,
         CTRLDEL, KC_HOME, KC_PGDN, KC_PGUP,  KC_END, ___X___, _______, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT,  KC_INS,
         _______, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, KC_COMM,  KC_DOT, KC_SLSH, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, KC_HOME, KC_PGDN, KC_PGUP,  KC_END
+        _______, _______, _______, _______, _______,      _______,     _______, KC_HOME, KC_PGDN, KC_PGUP,  KC_END
     ),
 
     /* Function
      * ,-----------------------------------------------------------------------------------.
      * | Reset|  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |  F7  |  F8  |  F9  |  F10 | Bksp |
      * |------+------+------+------+------+------+------+------+------+------+------+------|
-     * |      |      |      |      |      |      |      |  Pev | Vol- | Vol+ | Next |      |
+     * |      |Qwerty|Colemk|      |      |      |      |  Pev | Vol- | Vol+ | Next |      |
      * |------+------+------+------+------+------+------+------+------+------+------+------|
      * |      |      |      |      |      |      |      |      |      |      | Mute | Play |
      * |------+------+------+------+------+------+------+------+------+------+------+------|
      * |      |      |      |      |      |             |      |  Pev | Vol- | Vol+ | Next |
      * `-----------------------------------------------------------------------------------'
      */
-    [_FUNC] = LAYOUT_planck_grid(
+    [_FUNC] = LAYOUT_planck_mit(
           RESET,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10, ___X___,
-        ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, ___X___,
+        ___X___,  QWERTY, COLEMAK, ___X___, ___X___, ___X___, ___X___, KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, ___X___,
         ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, KC_MUTE, KC_MPLY,
-        ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT
+        ___X___, ___X___, ___X___, ___X___, ___X___,      ___X___,     ___X___, KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT
     )
 
 };
@@ -117,8 +135,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case QWERTY:
             if (record->event.pressed) {
-                print("mode just switched to qwerty and this is a huge string\n");
                 set_single_persistent_default_layer(_QWERTY);
+            }
+            return false;
+            break;
+        case COLEMAK:
+            if (record->event.pressed) {
+                set_single_persistent_default_layer(_COLEMAK);
             }
             return false;
             break;
