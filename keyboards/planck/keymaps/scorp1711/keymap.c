@@ -17,9 +17,9 @@
 #include QMK_KEYBOARD_H
 #include "muse.h"
 
-enum planck_layers { _QWERTY, _COLEMAK, _LOWER, _RAISE, _FUNC };
+enum planck_layers { _QWERTY, _COLEMAK, _WORKMAN, _LOWER, _RAISE, _FUNC };
 
-enum planck_keycodes { QWERTY = SAFE_RANGE, COLEMAK };
+enum planck_keycodes { QWERTY = SAFE_RANGE, COLEMAK, WORKMAN };
 
 #define LOWER MO(_LOWER)
 #define RAISE MO(_RAISE)
@@ -65,8 +65,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     */
     [_COLEMAK] = LAYOUT_planck_mit(
         KC_TAB,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,    KC_J,    KC_L,    KC_U,    KC_Y, KC_SCLN, KC_BSPC,
-        KC_ESC,  KC_A,    KC_R,    KC_S,    KC_T,    KC_D,    KC_H,    KC_N,    KC_E,    KC_I,    KC_O, KC_QUOT,
+        CTRLESC, KC_A,    KC_R,    KC_S,    KC_T,    KC_D,    KC_H,    KC_N,    KC_E,    KC_I,    KC_O, KC_QUOT,
         KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_K,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, ENTSHFT,
+        ___X___,   FN, KC_LALT, KC_LGUI,   LOWER,        KC_SPC,      RAISE, ALTRLFT, CTLRDWN,   KC_UP, KC_RGHT
+    ),
+
+        /* Workman
+    * ,-----------------------------------------------------------------------------------.
+    * | Tab  |   Q  |   D  |   R  |   W  |   B  |   J  |   F  |   U  |   P  |   ;  | Bksp |
+    * |------+------+------+------+------+------+------+------+------+------+------+------|
+    * | Esc  |   A  |   S  |   H  |   T  |   G  |   Y  |   N  |   E  |   O  |   I  |  "   |
+    * |------+------+------+------+------+------+------+------+------+------+------+------|
+    * | Shift|   Z  |   X  |   M  |   C  |   V  |   K  |   L  |   ,  |   .  |   /  |Enter |
+    * |------+------+------+------+------+------+------+------+------+------+------+------|
+    * | Brite| Ctrl | Alt  | GUI  |Lower |    Space    |Raise | Left | Down |  Up  |Right |
+    * `-----------------------------------------------------------------------------------'
+    */
+    [_WORKMAN] = LAYOUT_planck_mit(
+        KC_TAB,  KC_Q,    KC_D,    KC_R,    KC_W,    KC_B,    KC_J,    KC_F,    KC_U,    KC_P, KC_SCLN, KC_BSPC,
+        CTRLESC, KC_A,    KC_S,    KC_H,    KC_T,    KC_G,    KC_Y,    KC_N,    KC_E,    KC_O,    KC_I, KC_QUOT,
+        KC_LSFT, KC_Z,    KC_X,    KC_M,    KC_C,    KC_V,    KC_K,    KC_L, KC_COMM,  KC_DOT, KC_SLSH, ENTSHFT,
         ___X___,   FN, KC_LALT, KC_LGUI,   LOWER,        KC_SPC,      RAISE, ALTRLFT, CTLRDWN,   KC_UP, KC_RGHT
     ),
 
@@ -119,7 +137,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      */
     [_FUNC] = LAYOUT_planck_mit(
           RESET,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10, ___X___,
-        ___X___,  QWERTY, COLEMAK, ___X___, ___X___, ___X___, ___X___, KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, ___X___,
+        ___X___,  QWERTY, COLEMAK, WORKMAN, ___X___, ___X___, ___X___, KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT, ___X___,
         ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, KC_MUTE, KC_MPLY,
         ___X___, ___X___, ___X___, ___X___, ___X___,      ___X___,     ___X___, KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT
     )
@@ -142,6 +160,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case COLEMAK:
             if (record->event.pressed) {
                 set_single_persistent_default_layer(_COLEMAK);
+            }
+            return false;
+            break;
+        case WORKMAN:
+            if (record->event.pressed) {
+                set_single_persistent_default_layer(_WORKMAN);
             }
             return false;
             break;
